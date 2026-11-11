@@ -12,6 +12,21 @@ A small, offline native Kotlin Android utility for EL. Set a device-local target
 
 [Download or watch the demo video](docs/media/precision-clock.mp4)
 
+## Download
+
+### Download the APK
+
+1. Open the [latest successful GitHub Actions run](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml).
+2. Select the newest successful **Build Android APK** run.
+3. Under **Artifacts**, download **PrecisionClock-debug-APK**.
+4. Extract the downloaded ZIP and open `PrecisionClock-1.0.0-debug.apk` on your Android phone.
+
+This is a debug APK for direct installation, not a Play Store release. Android may ask you to allow installation from the browser or file manager.
+
+### Download the source
+
+Use the green **Code** button on GitHub and choose **Download ZIP**, or clone the repository with Git.
+
 ## Install on your phone
 
 1. Download **PrecisionClock-1.0.0-debug.apk** and open it in Files/Downloads.
