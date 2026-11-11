@@ -8,10 +8,6 @@ A small, offline native Kotlin Android utility for EL. Set a device-local target
 
 ![Precision Clock dashboard](docs/media/precision-clock-2.jpg)
 
-<video controls width="480" src="docs/media/precision-clock.mp4"></video>
-
-[Download or watch the demo video](docs/media/precision-clock.mp4)
-
 ## Download
 
 ### Download the APK
