@@ -35,13 +35,16 @@ class TimingTest {
     @Test fun checkpointsActivateAtExactThresholds() {
         assertEquals(listOf(2500L,2000L,1500L,1000L,500L), CountdownFrame.thresholds.toList())
         assertEquals(0,CountdownFrame.of(3000).activeCount)
+        val positions=listOf(1f/6f,1f/3f,0.5f,2f/3f,5f/6f)
         for (i in 0..4) {
             val t=CountdownFrame.thresholds[i]
             assertEquals(i,CountdownFrame.of(t+1).activeCount)
             assertEquals(i+1,CountdownFrame.of(t).activeCount)
+            assertEquals(positions[i],CountdownFrame.of(t).progress,0.0001f)
         }
         assertEquals(0f,CountdownFrame.of(3000).progress,0f)
         assertEquals(0.5f,CountdownFrame.of(1500).progress,0.0001f)
+        assertEquals(1f,CountdownFrame.of(0).progress,0f)
     }
     @Test fun formattingCeilsSoZeroIsNeverShownBeforeTarget() {
         assertEquals("00:00:02.5",formatCountdown(2500,1))

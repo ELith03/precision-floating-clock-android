@@ -9,15 +9,15 @@ Set an exact time on your device's local clock, then keep a clean, resizable cou
 
 ## Download
 
-### [Download the Android APK — v1.0.0](https://github.com/ELith03/precision-floating-clock-android/releases/download/v1.0.0/PrecisionClock-1.0.0-debug.apk)
+### [Download the Android APK — v1.0.1](https://github.com/ELith03/precision-floating-clock-android/releases/download/v1.0.1/PrecisionClock-1.0.1-debug.apk)
 
 **Android 8.0 or newer · Early-access debug build · No GitHub sign-in required**
 
-[Release notes and checksums](https://github.com/ELith03/precision-floating-clock-android/releases/tag/v1.0.0) · [All releases](https://github.com/ELith03/precision-floating-clock-android/releases)
+[Release notes and checksums](https://github.com/ELith03/precision-floating-clock-android/releases/tag/v1.0.1) · [All releases](https://github.com/ELith03/precision-floating-clock-android/releases)
 
 Download the `.apk` directly and open it on your phone. You do not need Android Studio, a computer, or a GitHub Actions artifact ZIP.
 
-> This is an initial debug-signed release for testing. If Android reports a signing conflict with a previously installed build, uninstall the older build first. Uninstalling clears saved settings. Independently built debug APKs can have different signing keys.
+> This is a debug build for testing. If Android reports a signing conflict with a previously installed build, uninstall the older build first. Uninstalling clears saved settings. Independently built debug APKs can have different signing keys.
 
 <p align="center">
   <img src="docs/previews/countdown.png" alt="Precision Clock at 2.5 seconds remaining, with white digits, an orange-red fraction and five checkpoints" width="720">
@@ -54,12 +54,14 @@ Time-only targets select the **next future occurrence**. Daily targets follow th
 
 ### The last three seconds
 
+The line spans **3.0 → 0.0 seconds**. The five dots sit inside that range, at 2.5, 2.0, 1.5, 1.0, and 0.5. The moving line reaches each dot when it activates.
+
 | Remaining time | Behavior |
 | --- | --- |
 | More than 3 seconds | Countdown only; no checkpoint line, dots, labels, or reserved timeline space |
-| 3.000 seconds | Timeline appears |
+| 3.000 seconds | Timeline appears at the left endpoint |
 | 2.5 / 2.0 / 1.5 / 1.0 / 0.5 seconds | Checkpoints activate in order |
-| 0 seconds | Countdown stops at zero and the timeline disappears |
+| 0 seconds | Progress reaches the right endpoint; countdown stops at zero and the timeline disappears |
 
 ## Controls
 
@@ -121,7 +123,7 @@ On Windows, use `gradlew.bat` instead of `bash ./gradlew`.
 
 The APK is written to `app/build/outputs/apk/debug/app-debug.apk`. Runtime dependencies are limited to Kotlin's standard library and Android platform APIs. Gradle, AGP, Kotlin, and test dependencies are version-pinned.
 
-The [GitHub Actions workflow](.github/workflows/android.yml) runs tests, lint, and compilation on pushes and manual dispatches. Successful builds upload APK/checksum and validation artifacts. The initial v1.0.0 download is published only after a successful main-branch build; later runs preserve the existing release assets.
+The [GitHub Actions workflow](.github/workflows/android.yml) runs tests, lint, and compilation on pushes and manual dispatches. Successful builds upload APK/checksum and validation artifacts. Tagged APKs are attached after a successful main-branch build. Existing downloads stay unchanged.
 
 ## Development and validation
 

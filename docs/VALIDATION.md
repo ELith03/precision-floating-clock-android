@@ -5,7 +5,7 @@ Final automated results are recorded below. No physical Android device or full e
 ## Phone acceptance checks
 
 1. Install the APK on Android 15, open it, set the 10-second test and enable floating mode. Grant overlay permission and return. Check the notification can open settings, hide/show and stop.
-2. Confirm the timeline is absent above 3 seconds. In the last 3 seconds it reveals all five labels: 2.5, 2.0, 1.5, 1.0, 0.5. Markers activate sequentially; zero hides the timeline and never goes negative.
+2. Confirm the timeline is absent above 3 seconds. The track runs from 3.0 at the left to 0.0 at the right, with five interior dots: 2.5, 2.0, 1.5, 1.0, 0.5. The line must reach each dot exactly as its ring activates; zero hides the timeline and never goes negative.
 3. Set upcoming midnight, next minute, and an exact date with seconds/milliseconds. Compare against the phone's local clock. Test one/two/three fractional digits. One-time completion should remain at zero after reopening.
 4. Set a daily time close to now. It must hold zero briefly and show the next day. Change timezone while running and while stopped; the target should retain its local hour. An absolute date target must retain its instant.
 5. Set size to 180 dp, then 700 dp. Drag to corners, pinch to resize, rotate portrait/landscape. The full expanded card should remain within available bounds. Reopen the app and confirm size/position persist.
@@ -20,7 +20,7 @@ Final automated results are recorded below. No physical Android device or full e
 - Installation and launch on a physical phone, real hardware refresh/traffic/frame performance, touch pass-through routing to another real app, vendor battery restrictions, physical cutouts, notification drawer presentation, vibration, and actual presented-frame timing.
 - Hardware validation: use the device checklist above. Current cloud build status and downloadable reports are available in the repository’s Actions tab.
 
-## Final automated results — 11 November 2026
+## Baseline results — 1.0.0, 11 November 2026
 
 | Check | Result |
 | --- | --- |
@@ -42,3 +42,7 @@ Robolectric virtual vsync is paused explicitly so a continuously scheduling fram
 Lint's remaining warnings concern untranslated/dynamic English strings, legacy inset lookup only on Android26–29, allocations in drawing, click accessibility/RTL guidance, backup metadata, and two stopService SAM-analysis false positives. They do not block this debug build; the warnings are included in the report.
 
 Original locally validated APK SHA-256 (cloud builds differ because of debug signing): `bde85bdffdcbe014cd30a2de2593e9b8d5daa920f70148b34fb2f791a3b8ac48`
+
+## Timeline fix — 1.0.1
+
+Native Canvas regression tests check all five dot positions against the full 3.0-to-0.0 track, compare each activation ring immediately before and at its threshold, and check progress in both end segments. The same suite renders widget previews. The fixed drawing passed 29 tests (14 timing, 12 Android behavior, 3 timeline rendering), plus lint and APK compilation in [this run](https://github.com/ELith03/precision-floating-clock-android/actions/runs/42979734422). Physical-device checks remain pending. Current results are in [Actions](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml).
