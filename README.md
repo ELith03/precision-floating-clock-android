@@ -2,6 +2,16 @@
 
 A small, offline native Kotlin Android utility for EL. Set a device-local target and float the countdown above other apps. Android 8.0+; targets Android 15 (API 35).
 
+## Preview
+
+![Precision Clock preview](docs/media/precision-clock-1.jpg)
+
+![Precision Clock dashboard](docs/media/precision-clock-2.jpg)
+
+<video controls width="480" src="docs/media/precision-clock.mp4"></video>
+
+[Download or watch the demo video](docs/media/precision-clock.mp4)
+
 ## Install on your phone
 
 1. Download **PrecisionClock-1.0.0-debug.apk** and open it in Files/Downloads.
