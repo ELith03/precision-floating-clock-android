@@ -17,6 +17,9 @@ jobs:
           java-version: '17'
       - name: Set up Android SDK
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
       - name: Install SDK packages
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Test, lint and build
@@ -26,7 +29,7 @@ jobs:
           test -s app/build/outputs/apk/debug/app-debug.apk
           mkdir -p dist
           cp app/build/outputs/apk/debug/app-debug.apk dist/PrecisionClock-1.0.0-debug.apk
-          sha256sum dist/PrecisionClock-1.0.0-debug.apk > dist/SHA256SUMS.txt
+          (cd dist && sha256sum PrecisionClock-1.0.0-debug.apk > SHA256SUMS.txt)
       - name: Upload APK
         id: apk
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
@@ -53,3 +56,48 @@ jobs:
         run: |
           printf '## Precision Clock\nBuild: %s\n\n' "$STATUS" >> "$GITHUB_STEP_SUMMARY"
           if [ -n "$APK_URL" ]; then printf '[Download APK artifact](%s)\n' "$APK_URL" >> "$GITHUB_STEP_SUMMARY"; fi
+
+  release:
+    name: Publish initial APK download
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: precision-clock-initial-release
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Publish v1.0.0 once
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=v1.0.0
+          if gh release view "$tag" > /dev/null 2>&1; then
+            printf 'Release %s already exists; preserving its APK and signing identity.\n' "$tag" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          gh run download "$GITHUB_RUN_ID" --name PrecisionClock-debug-APK --dir dist
+          test -s dist/PrecisionClock-1.0.0-debug.apk
+          (cd dist && sha256sum --check SHA256SUMS.txt)
+          cat > release-notes.md <<'NOTES'
+          ## Precision Clock 1.0.0 — early access
+
+          Download **PrecisionClock-1.0.0-debug.apk** below and open it on Android8.0 or newer.
+          Grant **Display over other apps**, choose a target, and enable floating mode.
+
+          Includes adjustable size/opacity, device-local and daily targets, five final-three-second checkpoints, and optional measured display/network statistics.
+
+          This is a debug-signed prerelease. An independently built APK can use a different signing key and require uninstalling the earlier build, which clears preferences. Physical-device testing is still needed for device/vendor-specific behavior.
+
+          Tests, Android lint, and compilation passed in the linked workflow before this asset was published. SHA-256 checksums are attached. No Play Store publication is implied.
+          NOTES
+          gh release create "$tag" dist/PrecisionClock-1.0.0-debug.apk dist/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" --title "Precision Clock 1.0.0 — Early Access" \
+            --notes-file release-notes.md --prerelease
+          printf '[Download APK](https://github.com/%s/releases/download/%s/PrecisionClock-1.0.0-debug.apk)\n' "$GH_REPO" "$tag" >> "$GITHUB_STEP_SUMMARY"
