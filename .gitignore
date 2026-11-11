@@ -7,3 +7,11 @@ local.properties
 .idea/
 *.jks
 *.keystore
+
+# Local exports and editor files
+dist/
+*.apk
+*.aab
+.vscode/
+.DS_Store
+Thumbs.db

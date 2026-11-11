@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Optional Termux route. Run only from the extracted project directory.
+# Usage: GITHUB_REPOSITORY=OWNER/NEW_REPO bash phone-upload.sh
 set -euo pipefail
 cd -- "$(dirname -- "$0")"
 repo="${GITHUB_REPOSITORY:-}"
