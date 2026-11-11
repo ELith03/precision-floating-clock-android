@@ -45,4 +45,4 @@ Original locally validated APK SHA-256 (cloud builds differ because of debug sig
 
 ## Timeline fix — 1.0.1
 
-Native Canvas regression tests check all five dot positions against the full 3.0-to-0.0 track, compare each activation ring immediately before and at its threshold, and check progress in both end segments. The same suite renders widget previews. Current results are in [Actions](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml).
+Native Canvas regression tests check all five dot positions against the full 3.0-to-0.0 track, compare each activation ring immediately before and at its threshold, and check progress in both end segments. The same suite renders widget previews. The fixed drawing passed 29 tests (14 timing, 12 Android behavior, 3 timeline rendering), plus lint and APK compilation in [this run](https://github.com/ELith03/precision-floating-clock-android/actions/runs/42979734422). Physical-device checks remain pending. Current results are in [Actions](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml).
