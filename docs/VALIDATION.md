@@ -18,8 +18,7 @@ Final automated results are recorded below. No physical Android device or full e
 ## What cannot be verified here
 
 - Installation and launch on a physical phone, real hardware refresh/traffic/frame performance, touch pass-through routing to another real app, vendor battery restrictions, physical cutouts, notification drawer presentation, vibration, and actual presented-frame timing.
-- Exact screenshot fidelity: the reference screenshot was not attached in this implementation turn.
-- GitHub Actions execution: the workflow is provided but was not remotely executed as part of this validation.
+- Hardware validation: use the device checklist above. Current cloud build status and downloadable reports are available in the repository’s Actions tab.
 
 ## Final automated results — 11 November 2026
 
@@ -34,7 +33,7 @@ Final automated results are recorded below. No physical Android device or full e
 | Manifest | package com.elith.precision, min SDK26, target SDK35, version1.0.0 |
 | Runtime permissions | Overlay, foreground service/specialUse, notifications, optional vibration; no INTERNET permission |
 | Visual QA | Actual native Canvas widget and phone-size dashboard renders inspected; no digit clipping in final renders |
-| GitHub workflow | Static workflow and source supplied; remote execution not performed |
+| GitHub workflow | Live build status and reports: [Build Android APK](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml) |
 
 Coverage includes midnight/date transitions, millisecond targets, strictly future selection, timezone changes including while stopped, DST gap/overlap, wall-clock steps and resume, no early zero, completion latching, daily recurrence, all five exact checkpoint thresholds, adaptive height, persisted size/opacity/target settings, overlay permission denial, foreground notification and hide/show lifecycle, touch-through opacity policy, stale completion cancellation, landscape bounds, Activity recreation, date-editor mode preservation and traffic-rate formatting/unavailability.
 
@@ -42,4 +41,4 @@ Robolectric virtual vsync is paused explicitly so a continuously scheduling fram
 
 Lint's remaining warnings concern untranslated/dynamic English strings, legacy inset lookup only on Android26–29, allocations in drawing, click accessibility/RTL guidance, backup metadata, and two stopService SAM-analysis false positives. They do not block this debug build; the warnings are included in the report.
 
-APK SHA-256: `bde85bdffdcbe014cd30a2de2593e9b8d5daa920f70148b34fb2f791a3b8ac48`
+Original locally validated APK SHA-256 (cloud builds differ because of debug signing): `bde85bdffdcbe014cd30a2de2593e9b8d5daa920f70148b34fb2f791a3b8ac48`
