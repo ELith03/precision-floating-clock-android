@@ -18,6 +18,6 @@ Keep the app offline and lightweight. Display measured statistics only, preserve
 
 ## Release maintenance
 
-The main-branch workflow creates the initial `v1.0.0` prerelease after tests, lint, and APK compilation pass. Its APK and SHA-256 checksum are public release assets. Existing release assets are never overwritten by subsequent documentation/build runs.
+Main-branch builds attach the versioned APK and checksum to GitHub Releases after tests and lint pass. Existing downloads are kept unchanged.
 
 Before publishing another version, update the app's version, artifact filename, release tag and README download together. Debug keys are generated per build environment and do not provide a stable update identity. For a long-term release channel, configure a consistent signing key using repository secrets; never store a private key in source control. Do not silently replace an existing version with an APK signed by a different key.
