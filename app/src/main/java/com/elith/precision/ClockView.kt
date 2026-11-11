@@ -93,9 +93,12 @@ class ClockView(context: Context): View(context), Choreographer.FrameCallback {
             canvas.drawLine(x0,y,x1,y,p)
             p.alpha=255
             canvas.drawLine(x0,y,x0+(x1-x0)*frame.progress,y,p)
+            p.textSize=12f; p.typeface=labelFont; p.color=Color.rgb(208,213,224)
+            canvas.drawText("3.0",x0-p.measureText("3.0")/2,top+12,p)
+            canvas.drawText("0.0",x1-p.measureText("0.0")/2,top+12,p)
             val labels=arrayOf("2.5","2.0","1.5","1.0","0.5")
             for(i in 0..4) {
-                val x=x0+i*(x1-x0)/4f
+                val x=x0+(x1-x0)*(3000L-CountdownFrame.thresholds[i])/3000f
                 p.textSize=12f; p.typeface=labelFont; p.color=Color.WHITE
                 canvas.drawText(labels[i],x-p.measureText(labels[i])/2,top+12,p)
                 p.color=Color.rgb(245,245,245); canvas.drawCircle(x,y,4.8f,p)
