@@ -1,124 +1,145 @@
-# Precision Floating Clock
+# Precision Clock
 
-A small, offline native Kotlin Android utility for EL. Set a device-local target and float the countdown above other apps. Android 8.0+; targets Android 15 (API 35).
+A floating Android countdown that keeps your next moment in view.
 
-## Preview
+Set an exact time on your device's local clock, then keep a clean, resizable countdown above other apps. Built with native Kotlin and Android Canvas. Works offline, with no account, ads, or subscriptions.
 
-![Precision Clock preview](docs/media/precision-clock-1.jpg)
-
-![Precision Clock dashboard](docs/media/precision-clock-2.jpg)
+[![Build Android APK](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml/badge.svg)](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-3D4456.svg)](LICENSE)
 
 ## Download
 
-### Download the APK
+### [Download the Android APK — v1.0.0](https://github.com/ELith03/precision-floating-clock-android/releases/download/v1.0.0/PrecisionClock-1.0.0-debug.apk)
 
-1. Open the [latest successful GitHub Actions run](https://github.com/ELith03/precision-floating-clock-android/actions/workflows/android.yml).
-2. Select the newest successful **Build Android APK** run.
-3. Under **Artifacts**, download **PrecisionClock-debug-APK**.
-4. Extract the downloaded ZIP and open `PrecisionClock-1.0.0-debug.apk` on your Android phone.
+**Android 8.0 or newer · Early-access debug build · No GitHub sign-in required**
 
-This is a debug APK for direct installation, not a Play Store release. Android may ask you to allow installation from the browser or file manager.
+[Release notes and checksums](https://github.com/ELith03/precision-floating-clock-android/releases/tag/v1.0.0) · [All releases](https://github.com/ELith03/precision-floating-clock-android/releases)
 
-### Download the source
+Download the `.apk` directly and open it on your phone. You do not need Android Studio, a computer, or a GitHub Actions artifact ZIP.
 
-Use the green **Code** button on GitHub and choose **Download ZIP**, or clone the repository with Git.
+> This is an initial debug-signed release for testing. If Android reports a signing conflict with a previously installed build, uninstall the older build first. Uninstalling clears saved settings. Independently built debug APKs can have different signing keys.
 
-## Install on your phone
+<p align="center">
+  <img src="docs/previews/countdown.png" alt="Precision Clock at 2.5 seconds remaining, with white digits, an orange-red fraction and five checkpoints" width="720">
+</p>
 
-1. Download **PrecisionClock-1.0.0-debug.apk** and open it in Files/Downloads.
-2. If Android asks, allow installation from the browser or Files app you used. Install Precision Clock.
-3. Open Precision Clock → **Choose target time & date**, or tap a quick target.
-4. Tap **Enable floating clock**. Allow **Display over other apps**, then return to Precision Clock. Allow notifications for convenient controls.
-5. The countdown starts immediately. Open **Style** to change width, opacity, text size, rounding and colors. Open **Float** to lock, enable touch-through, hide or reset position.
+## Get started
 
-Drag the card to move it, pinch to resize, long-press for settings, or double-tap to hide. Notification actions show/hide or stop it. The main application always offers recovery from touch-through. If notifications were denied, reopen the app directly.
+1. **Install:** open the downloaded APK. If Android asks, allow installation from the browser or Files app you used.
+2. **Set a target:** open **Precision Clock** and choose a time/date, a daily repeat, or a quick preset.
+3. **Enable floating mode:** tap **Enable floating clock**, allow **Display over other apps**, and return to the app.
+4. **Allow notifications:** use the notification to reopen settings, show/hide the clock, or stop it.
+5. **Make it yours:** use **Style** for size, opacity, colors, and digit precision; use **Float** for position lock and touch-through.
 
-The **10-second test countdown** is the fastest way to check the five dots. They must be absent above 3 seconds, appear at 3 seconds, react at 2.5/2.0/1.5/1.0/0.5, then disappear at zero.
+For a quick check, choose **10-second test countdown** and watch the checkpoints appear during the final three seconds.
 
-This is a personal debug build. No Play Store submission or device installation has been performed by the developer. Debug signing keys generated on separate machines/runners differ, so an APK from a future independent Actions run may require uninstalling the earlier build first; this erases local preferences. Preserve the same signing key privately for stable future updates, never commit it.
+## What it does
 
-## Features
+| Feature | Details |
+| --- | --- |
+| Local-time targets | Next occurrence, a one-time date/time, or a daily repeating time; optional target milliseconds |
+| Precision display | `HH:MM:SS.d`, with optional two or three fractional digits and stable digit spacing |
+| Final-three-second timeline | Five checkpoints at **2.5 · 2.0 · 1.5 · 1.0 · 0.5** seconds; completely hidden before the final three seconds and at zero |
+| Floating controls | Drag to move, pinch to resize, lock position, hide/show, and optional touch-through |
+| Appearance | Adjustable width, opacity, digit size, corner radius, accent/background colors, and compact/full layouts |
+| Display information | Actual display refresh rate, independent render caps, and an optional measured drawing interval |
+| Network information | Optional upload/download rates from Android's traffic counters, sampled about once a second |
+| Completion | Silent by default; optional flash, vibration, or hide-after-completion; daily targets advance after a brief zero hold |
 
-- Native Canvas card: #3D4456 background, white tabular-cell digits, #FF513D fractional digits and timeline.
-- `HH:MM:SS.d`, with optional 2 or 3 fractional digits. Positive fractions round upward, so an unfinished interval is not rounded to zero.
-- Next occurrence, one-time absolute date/time, daily local-time repeat, target milliseconds; 12/24-hour picker and local display.
-- Quick midnight, next minute, next hour and 10-second test targets.
-- Timeline fully absent outside `0 < remaining <= 3000 ms`; no blank timeline area. Five vector checkpoints share the numeric countdown value.
-- Silent default completion, optional subtle flash or short vibration; optional hide after one-time completion. Daily schedules hold zero for 1.2 seconds and advance by local calendar day.
-- Resizable, draggable overlay; safe display bounds, saved relative position, adjustable opacity, compact mode, locked position and touch-through.
-- Actual display refresh rate and independent rendering caps: 30, 60, Auto, 90, 120. Display vsync naturally limits rendering to the device's active refresh rate. No attempt to force panel refresh.
-- Optional measured drawing interval and approximately one-second total traffic counter sampling. No fabricated stats.
-- All preferences stay on the device. No ads, subscriptions, backend, analytics, accounts, internet permission or accessibility service.
+### A countdown to a real target
 
-## Timing and platform limitations
+For a target of midnight, if the device time is `23:59:57.500`, the clock shows `00:00:02.5`. It reaches zero at the selected timestamp instead of running as a stopwatch.
 
-The authoritative source is `System.currentTimeMillis()`, the phone's wall clock. A monotonic anchor is checked against the wall clock every frame and reanchored on discrepancies and at least every 250 ms. Remaining time is calculated from target minus current time, rather than subtracting render intervals. Completion holds use monotonic elapsed time. A stopped one-time target remains latched at zero until changed.
+Time-only targets select the **next future occurrence**. Daily targets follow the device's current timezone and advance by calendar date. A one-time date/time remains the same absolute instant if the timezone changes.
 
-An absolute date/time target remains the same instant when the timezone changes. A daily target follows the local timezone. DST gaps shift forward by the gap; overlapping local times use the first occurrence, once per date. A saved next-occurrence target becomes a fixed instant once configured. Changing the clock can jump the visible countdown as expected.
+### The last three seconds
 
-The optional `ms` reading measures intervals between actual Canvas draw callbacks, smoothed over recent draws. It is not NTP accuracy, internet ping, CPU drawing cost, GPU presentation time, or a guarantee that a frame reached the display. The original screenshot's metric cannot be identified from its label alone; draw interval is a deliberately defined alternative. At 60 draws/second it is around 16.7 ms; lower caps/power saver increase it.
+| Remaining time | Behavior |
+| --- | --- |
+| More than 3 seconds | Countdown only; no checkpoint line, dots, labels, or reserved timeline space |
+| 3.000 seconds | Timeline appears |
+| 2.5 / 2.0 / 1.5 / 1.0 / 0.5 seconds | Checkpoints activate in order |
+| 0 seconds | Countdown stops at zero and the timeline disappears |
 
-Rendering is synchronized to `Choreographer`. The exact visible transition depends on frame availability, scheduler delays and screen refresh. Higher FPS does not guarantee millisecond timing or an accurate device clock. No network time synchronization is performed.
+## Controls
 
-Power saver limits drawing to 30 FPS outside the final 10 seconds. Drawing stops when the screen goes off. There is no wake lock, exact alarm or background boot launch; completion effects while asleep or suspended may be delayed until the next active render. Android/vendor battery policies may terminate even foreground services; reopen the app and enable the clock if necessary. This utility is not an alarm-clock replacement.
+| Action | Control |
+| --- | --- |
+| Move the overlay | Drag while unlocked |
+| Resize | Pinch with two fingers, or change **Style → Width** |
+| Adjust transparency | **Style → Opacity** |
+| Open settings from the overlay | Long-press |
+| Hide the overlay | Double-tap, the app, or the notification |
+| Restore or stop it | The notification or main app |
+| Prevent movement | **Float → Lock position & size** |
+| Let touches reach the app underneath | **Float → Touch-through** |
 
-Android 12+ blocks touches through overly opaque untrusted overlays. Touch-through uses `FLAG_NOT_TOUCHABLE` and clamps effective window opacity to the system's maximum (typically 80%) while keeping the saved requested opacity. The notification/main app remain available. Secure apps, permission screens and system surfaces can refuse or hide overlays; this app respects that restriction.
+When touch-through is on, use the notification or main app to change settings. Android 12+ can limit the effective opacity of touch-through overlays, typically to 80%.
 
-Network rates are deltas of `TrafficStats.getTotalRxBytes/getTotalTxBytes`, divided by monotonic elapsed time, across interfaces Android exposes. They are approximate and may include VPN/virtual-interface effects; they are not a billing meter or per-app attribution. Unsupported/reset/restricted counters show a dash and establish a fresh baseline. Zero traffic is displayed only when valid counters actually show no increase. No usage-access or phone-state permission is required.
+## Screenshots
 
-Foreground overlay service type is `specialUse`, with a declared subtype explaining its purpose. Starting is user initiated from the visible Activity, as required by modern Android background-start restrictions. Notification visibility depends on notification permission/settings; the foreground service still has its system entry when drawer permission is denied.
+<p align="center">
+  <img src="docs/media/precision-clock-1.jpg" alt="Precision Clock on Android" width="300">
+  <img src="docs/media/precision-clock-2.jpg" alt="Precision Clock settings and floating countdown" width="300">
+</p>
 
-## Build locally
+## Privacy and permissions
 
-Requires JDK 17+, Android SDK platform 35 and build-tools 35.0.0. Set `ANDROID_HOME` to your SDK or provide an untracked `local.properties` containing `sdk.dir=/absolute/sdk/path`.
+The app stores preferences locally. It has **no internet permission**, analytics, backend, login, or advertising SDK.
+
+| Permission | Purpose |
+| --- | --- |
+| Display over other apps | Show the floating clock |
+| Foreground service / special use | Keep the user-started overlay service running with system controls |
+| Notifications | Provide settings, hide/show, and stop controls |
+| Vibration | Optional short completion vibration |
+
+Network-rate counters are read locally through Android APIs; displaying them does not require sending data anywhere. No root or accessibility service is used.
+
+## Timing, performance, and limitations
+
+- **Device time is the source.** Remaining time is calculated from the target timestamp and current clock, with a monotonic anchor reconciled against wall time. UI intervals are not repeatedly subtracted, so skipped frames do not accumulate countdown drift.
+- **Visible precision has limits.** Display frames, OS scheduling, and the accuracy of the device clock affect what you see. Fractional values round upward so a positive remaining interval is not formatted as zero. This app does not perform network time synchronization.
+- **Hz and FPS mean different things.** Hz reports the active display mode. A 30/60/90/120 FPS cap limits drawing workload; it does not force the hardware refresh rate. Auto follows available display frames. Power saver caps drawing at 30 FPS outside the final ten seconds.
+- **The `ms` label is a measured draw interval.** It averages time between Canvas draw callbacks. It is not clock-sync accuracy, internet latency, CPU rendering cost, or proof of presentation to the display.
+- **Network rates are approximate.** TrafficStats totals can be affected by VPNs, virtual interfaces, and vendor restrictions. A dash means unavailable statistics or a fresh baseline.
+- **Android controls overlays.** Secure apps and system screens can hide them. Battery policies can stop the service; reopen the app to restart it if needed.
+- **Screen-off rendering pauses.** There is no CPU wake lock, exact alarm, or boot-time auto-start. Completion effects can be delayed until the device wakes. Use a dedicated alarm app for wake-up alerts.
+- **Daily schedules follow local calendar rules.** Daylight-saving gaps shift forward, and repeated local times use the first occurrence once per date. Daily completion holds zero for about 1.2 seconds before advancing.
+
+## Build from source
+
+Requirements: **JDK 17+**, Android SDK **platform 35**, and **build-tools 35.0.0**. Set `ANDROID_HOME` or create an untracked `local.properties` with `sdk.dir=/path/to/android-sdk`.
 
 ```bash
+git clone https://github.com/ELith03/precision-floating-clock-android.git
+cd precision-floating-clock-android
 bash ./gradlew --no-daemon testDebugUnitTest lintDebug assembleDebug
 ```
 
-APK: `app/build/outputs/apk/debug/app-debug.apk`.
+On Windows, use `gradlew.bat` instead of `bash ./gradlew`.
 
-Runtime dependencies: Kotlin standard library plus Android platform APIs. Test-only dependencies: JUnit 4.13.2 and Robolectric 4.14.1. Gradle wrapper pins 8.11.1 with its SHA-256 checksum. AGP 8.9.2 and Kotlin 2.1.20 are pinned for this API35 build.
+The APK is written to `app/build/outputs/apk/debug/app-debug.apk`. Runtime dependencies are limited to Kotlin's standard library and Android platform APIs. Gradle, AGP, Kotlin, and test dependencies are version-pinned.
 
-## Phone-only GitHub Actions route
+The [GitHub Actions workflow](.github/workflows/android.yml) runs tests, lint, and compilation on pushes and manual dispatches. Successful builds upload APK/checksum and validation artifacts. The initial v1.0.0 download is published only after a successful main-branch build; later runs preserve the existing release assets.
 
-The supplied workflow runs on push or manual dispatch, installs JDK17/SDK35, runs tests and lint, builds the debug APK, checks it exists, and uploads it as **PrecisionClock-debug-APK**. A second artifact contains reports and real Android Canvas snapshots. Actions are pinned to resolved commit SHAs. Repository Actions minutes/retention are subject to your GitHub account's limits; no paid service is required by the app.
+## Development and validation
 
-For a phone-only self-upload, use Termux from its official distribution:
+The automated suite covers timing, recurrence, clock changes, checkpoint thresholds, formatting, preference persistence, overlay policies/lifecycle, landscape sizing, and native Canvas previews. See [validation and the device checklist](docs/VALIDATION.md) for test coverage and the limits of JVM-based Android testing.
 
-1. Download the source ZIP and extract it with your phone's file manager.
-2. In Termux: `pkg install git gh unzip`, then `termux-setup-storage` and allow access to the downloaded project.
-3. `gh auth login --web --git-protocol https --scopes workflow`. The workflow scope lets GitHub accept the Actions YAML file.
-4. `cd` to the extracted `precision-floating-clock-android` folder and run `bash phone-upload.sh`.
-5. Set `GITHUB_REPOSITORY=OWNER/REPOSITORY` and run `bash phone-upload.sh`. The script refuses to touch an existing repository or existing git checkout. It creates a private repository, commits this project and pushes it. Open its Actions tab and wait for the build.
-6. Open the successful run → **Artifacts → PrecisionClock-debug-APK**, download/extract the ZIP and install its APK.
+Physical-device testing remains important, particularly for overlays, touch-through, cutouts, refresh rates, and vendor battery behavior.
 
-No credentials belong in source files. The upload script uses the GitHub CLI session already configured on the device.
-
-## Project structure
-
-| File | Responsibility |
+| Source | Responsibility |
 | --- | --- |
-| `Timing.kt` | Calendar recurrence, countdown state, threshold model, clock reconciliation, formatting and traffic deltas |
-| `ClockStore.kt` | Local configuration, persistence and daily timezone reconciliation |
-| `ClockView.kt` | Vector card drawing, adaptive height, digit cells, timeline and draw scheduling |
-| `LiveMetrics.kt` | Real display refresh rate and TrafficStats sampling |
-| `OverlayService.kt` | Foreground notification, overlay lifecycle, gestures, safe placement and touch-through |
-| `MainActivity.kt` | Dashboard, preview, target editor, appearance, floating and performance settings |
-| `.github/workflows/android.yml` | Reproducible cloud test/lint/APK build and artifacts |
+| [`Timing.kt`](app/src/main/java/com/elith/precision/Timing.kt) | Scheduling, countdown state, clock reconciliation, formatting, and traffic deltas |
+| [`ClockStore.kt`](app/src/main/java/com/elith/precision/ClockStore.kt) | Local settings and daily timezone reconciliation |
+| [`ClockView.kt`](app/src/main/java/com/elith/precision/ClockView.kt) | Vector drawing, adaptive layout, timeline, and frame scheduling |
+| [`LiveMetrics.kt`](app/src/main/java/com/elith/precision/LiveMetrics.kt) | Display refresh rate and network sampling |
+| [`OverlayService.kt`](app/src/main/java/com/elith/precision/OverlayService.kt) | Foreground service, notification, gestures, positioning, and touch-through |
+| [`MainActivity.kt`](app/src/main/java/com/elith/precision/MainActivity.kt) | Dashboard and settings |
 
-## Verification
-
-See `docs/VALIDATION.md` for the actual build/test results and physical-device checklist. Robolectric tests exercise Android APIs in a JVM environment, not a physical phone or full Android emulator. The screenshot reference was not attached in the implementation turn, so exact pixel comparison was unavailable; the card follows the supplied colors, hierarchy, labels and proportions.
+Bug reports and pull requests are welcome. Include your Android version, phone model, steps to reproduce, and relevant screenshots. Please follow [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This project is released under the MIT License. See [LICENSE](LICENSE).
-
-## Android references
-
-- [Foreground service types, including specialUse](https://developer.android.com/develop/background-work/services/fgs/service-types)
-- [Android 15 background-start changes](https://developer.android.com/about/versions/15/behavior-changes-15)
-- [Overlay touch security and LayoutParams](https://developer.android.com/reference/android/view/WindowManager.LayoutParams)
-- [TrafficStats](https://developer.android.com/reference/android/net/TrafficStats)
-- [AGP 8.9 compatibility](https://developer.android.com/build/releases/agp-8-9-0-release-notes)
+[MIT](LICENSE) · Copyright © 2026 EL
